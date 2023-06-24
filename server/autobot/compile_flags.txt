@@ -1,0 +1,4 @@
+-DDEBUG
+-DDYNLIB_DIR="./libDyn"
+-Iinclude
+-Ilibstat
