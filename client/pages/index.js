@@ -4,25 +4,20 @@ import Head from "next/head"
 function index(){
   const [message, setMessage] = useState("Loading");
 
-  useEffect(()=>{
-    fetch("http://localhost:8080/api/home")
-      .then((response) => response.json())
-      .then((data) => {
-        setMessage(data.message);
-      });
-  }, []);
+  // useEffect(()=>{
+  //   fetch("http://localhost:8080/api/home")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setMessage(data.message);
+  //     });
+  // }, []);
 
-  const [boardData, setBoardData] = useState({
-    0:"",
-    1:"",
-    2:"",
-    3:"",
-    4:"",
-    5:"",
-    6:"",
-    7:"",
-    8:"",
+  const [boardSize, setBoardSize] = useState({
+    width:0,height:0
   });
+  const [boardData, setBoardData] = useState(
+    [{X:0,Y:0,Player:"",Coin:0}]
+  );
 
   return (
     <div>
@@ -32,7 +27,21 @@ function index(){
       <h1>Tic Tac Toe</h1>
       <div className="game">
         <div className="game_menu">
-          <button>Next</button>
+          <button onClick={()=>{
+            fetch("http://localhost:8080/api/start")
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data.board_size),
+              setBoardSize(()=>{
+                return {
+                width:data.board_size.width,
+                height:data.board_size.height};
+              })
+            });
+          }}>
+            Start
+          </button>
+          <h1>{boardSize.width}x{boardSize.height}</h1>
         </div>
         <div className="board">
           {[...Array(8)].map((v,idx) => {
