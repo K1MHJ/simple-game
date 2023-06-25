@@ -3,22 +3,10 @@ import Head from "next/head"
 
 function index(){
   const [message, setMessage] = useState("Loading");
-
-  // useEffect(()=>{
-  //   fetch("http://localhost:8080/api/home")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setMessage(data.message);
-  //     });
-  // }, []);
-
   const [boardSize, setBoardSize] = useState({
     width:0,height:0
   });
-  const [boardData, setBoardData] = useState(
-    [{X:0,Y:0,Player:"",Coin:0}]
-  );
-
+  const [boardData, setBoardData] = useState([]);
   return (
     <div>
       <Head>
@@ -31,28 +19,47 @@ function index(){
             fetch("http://localhost:8080/api/start")
             .then((response) => response.json())
             .then((data) => {
-              console.log(data.board_size),
               setBoardSize(()=>{
                 return {
-                width:data.board_size.width,
-                height:data.board_size.height};
+                  width:data.board_size.width,
+                  height:data.board_size.height};
               })
-            });
+              setBoardData([...data.coins]);
+            })
           }}>
             Start
+          </button>
+          <button onClick={()=>{
+            fetch("http://localhost:8080/api/next")
+            .then((response) => response.json())
+            .then((data) => {
+              setBoardData([...data.coins]);
+            })
+          }}>
+            Next 
           </button>
           <h1>{boardSize.width}x{boardSize.height}</h1>
         </div>
         <div className="board">
-          {[...Array(8)].map((v,idx) => {
+          {[...Array(8)].map((v,idy) => {
             return <div 
-              key={idx} 
+              key={idy} 
               className="row">
-
               {[...Array(8)].map((v,idx) => {
                 return <div 
                   key={idx} 
                   className="square">
+                  {
+                    boardData
+                    .filter((p) => {return (p.X === idx && p.Y === idy);})
+                    .map((p) => {
+                      if(p.Player === 'A'){
+                        return (<div key={`{p.X}{p.Y}`} className="allyCoin"><h1 className="allyCoinText">{p.Coin}</h1></div>)
+                      }else if(p.Player === 'B'){
+                        return (<div key={`{p.X}{p.Y}`} className="enemyCoin"><h1 className="enemyCoinText">{p.Coin}</h1></div>)
+                      }
+                    })
+                  }
                 </div>;
               })}
 

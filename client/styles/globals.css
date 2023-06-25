@@ -68,3 +68,28 @@ button {
   .square:nth-of-type(odd) {
     background-color: lightgreen;
   }
+
+.allyCoin {
+  display: flex;
+  width: 90%;
+  height: 90%;
+  background-color: white;
+  border-radius: 50%;
+}
+.allyCoinText {
+  margin:auto;
+  text-align: center;
+  color: black;
+}
+.enemyCoin {
+  display: flex;
+  width: 90%;
+  height: 90%;
+  background-color: black;
+  border-radius: 50%;
+}
+.enemyCoinText {
+  margin:auto;
+  text-align: center;
+  color: white;
+}
